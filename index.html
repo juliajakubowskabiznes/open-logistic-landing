@@ -173,30 +173,7 @@ i{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none
 </section>
 
 <!-- JAK TO DZIAŁA — 8 ekranów -->
-<div class="eli" id="jak">
-
-<!-- 1. Analogia -->
-<section class="ekran" aria-labelledby="e1">
-  <p class="krok" data-t="e1.k">Jak to działa</p>
-  <h2 id="e1" data-t="e1.h">Asystent przygotowuje. <i>Ty podpisujesz.</i></h2>
-  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
-    <line x1="60" y1="345" x2="840" y2="345" class="d dim"/>
-    <circle cx="235" cy="118" r="26" class="d"/>
-    <path d="M235 144V252M235 172l86 42M235 172l-52 56M235 252l-28 90M235 252l28 90" class="d"/>
-    <text x="235" y="395" class="lb" text-anchor="middle" data-tt="a.asst">Asystent</text>
-    <g transform="rotate(-6 400 265)">
-      <rect x="335" y="190" width="130" height="160" rx="5" class="d"/>
-      <path d="M358 222h84M358 248h64M358 274h84" class="d mid"/>
-      <text x="400" y="326" class="lb lba" text-anchor="middle" font-size="22">2 340 zł</text>
-      <g class="mark"><circle cx="438" cy="214" r="22" class="d acc"/><text x="438" y="220" class="lb lba" text-anchor="middle" font-size="14" data-tt="a.tak">TAK</text></g>
-    </g>
-    <circle cx="650" cy="118" r="26" class="d"/>
-    <path d="M650 144V252M650 172l-70 44M650 172l58 60M650 252l-28 90M650 252l28 90" class="d"/>
-    <g class="stamp"><rect x="500" y="196" width="60" height="30" rx="4" class="solid"/><path d="M530 196V170" class="d acc"/><circle cx="530" cy="164" r="7" class="solid"/></g>
-    <text x="650" y="395" class="lb" text-anchor="middle" data-tt="a.you">Ty</text>
-  </svg>
-  <p class="podpis" data-t="e1.p">Jak dobry asystent w biurze: przynosi gotowe, Ty mówisz „tak”.</p>
-</section>
+<div class="eli" id="historia">
 
 <!-- 2. Bez asystenta -->
 <section class="ekran" aria-labelledby="e2">
@@ -225,9 +202,73 @@ i{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none
   <p class="podpis" data-t="e2.p">Telefon, kalkulator, maile — kwadrans na jedno zapytanie. A bus jedzie w połowie pusty.</p>
 </section>
 
+<!-- 1. Analogia -->
+<section class="ekran" aria-labelledby="e1">
+  <p class="krok" data-t="e1.k">Z asystentem</p>
+  <h2 id="e1" data-t="e1.h">Asystent przygotowuje. <i>Ty podpisujesz.</i></h2>
+  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
+    <line x1="60" y1="345" x2="840" y2="345" class="d dim"/>
+    <circle cx="235" cy="118" r="26" class="d"/>
+    <path d="M235 144V252M235 172l86 42M235 172l-52 56M235 252l-28 90M235 252l28 90" class="d"/>
+    <text x="235" y="395" class="lb" text-anchor="middle" data-tt="a.asst">Asystent</text>
+    <g transform="rotate(-6 400 265)">
+      <rect x="335" y="190" width="130" height="160" rx="5" class="d"/>
+      <path d="M358 222h84M358 248h64M358 274h84" class="d mid"/>
+      <text x="400" y="326" class="lb lba" text-anchor="middle" font-size="22">2 340 zł</text>
+      <g class="mark"><circle cx="438" cy="214" r="22" class="d acc"/><text x="438" y="220" class="lb lba" text-anchor="middle" font-size="14" data-tt="a.tak">TAK</text></g>
+    </g>
+    <circle cx="650" cy="118" r="26" class="d"/>
+    <path d="M650 144V252M650 172l-70 44M650 172l58 60M650 252l-28 90M650 252l28 90" class="d"/>
+    <g class="stamp"><rect x="500" y="196" width="60" height="30" rx="4" class="solid"/><path d="M530 196V170" class="d acc"/><circle cx="530" cy="164" r="7" class="solid"/></g>
+    <text x="650" y="395" class="lb" text-anchor="middle" data-tt="a.you">Ty</text>
+  </svg>
+  <p class="podpis" data-t="e1.p">Jak dobry asystent w biurze: przynosi gotowe, Ty mówisz „tak”.</p>
+</section>
+
+<!-- 8. Łańcuch: optymalizacja = efektywność = ekologia = klienci korporacyjni -->
+<section class="ekran" aria-labelledby="e9">
+  <p class="krok" data-t="e9.k">Nie tylko zarobek</p>
+  <h2 id="e9" data-t="e9.h">Pełny bus to <i>więcej niż marża</i></h2>
+  <svg class="pic" viewBox="0 0 900 330" aria-hidden="true">
+    <!-- 1. optymalizacja przejazdów: pełny bus -->
+    <g class="tak" style="--d:.1s">
+      <g transform="translate(40 88)">
+        <path d="M0 64V12h112l34 22v30H0z" class="d"/><path d="M112 12v52" class="d mid"/>
+        <rect x="8" y="20" width="22" height="34" class="solid"/><rect x="36" y="20" width="22" height="34" class="solid"/><rect x="64" y="20" width="22" height="34" class="solid"/><rect x="92" y="20" width="14" height="34" class="solid"/>
+        <circle cx="30" cy="72" r="10" class="d"/><circle cx="120" cy="72" r="10" class="d"/>
+      </g>
+      <text x="120" y="222" class="lb" text-anchor="middle" font-size="12" data-tt="k1.a">Optymalizacja</text><text x="120" y="242" class="lb" text-anchor="middle" font-size="12" data-tt="k1.b">przejazdów</text>
+    </g>
+    <text x="230" y="150" class="lb lba" text-anchor="middle" font-size="44">=</text>
+    <!-- 2. większa efektywność: wskaźnik -->
+    <g class="tak" style="--d:.45s">
+      <path d="M270 168a70 70 0 0 1 140 0" class="d mid"/>
+      <path d="M270 168a70 70 0 0 1 108-59" class="d acc"/>
+      <path d="M340 168l44-46" class="d acc"/><circle cx="340" cy="168" r="6" class="solid"/>
+      <text x="340" y="222" class="lb" text-anchor="middle" font-size="12" data-tt="k2.a">Większa</text><text x="340" y="242" class="lb" text-anchor="middle" font-size="12" data-tt="k2.b">efektywność</text>
+    </g>
+    <text x="450" y="150" class="lb lba" text-anchor="middle" font-size="44">=</text>
+    <!-- 3. większa ekologia: liść + CO2 w dół -->
+    <g class="tak" style="--d:.8s">
+      <path d="M520 172c-4-52 30-86 84-88-2 54-34 86-84 88z" class="d acc"/><path d="M524 170c14-30 34-52 62-70" class="d acc"/>
+      <text x="620" y="116" class="lb lbm" font-size="13">CO₂</text><path d="M632 124v30M622 146l10 10 10-10" class="d mid"/>
+      <text x="560" y="222" class="lb" text-anchor="middle" font-size="12" data-tt="k3.a">Większa</text><text x="560" y="242" class="lb" text-anchor="middle" font-size="12" data-tt="k3.b">ekologia</text>
+    </g>
+    <text x="670" y="150" class="lb lba" text-anchor="middle" font-size="44">=</text>
+    <!-- 4. klienci korporacyjni: biurowiec + odhaczony raport -->
+    <g class="tak" style="--d:1.15s">
+      <rect x="722" y="76" width="96" height="100" rx="3" class="d"/>
+      <path d="M740 94h12M764 94h12M788 94h12M740 116h12M764 116h12M788 116h12M740 138h12M764 138h12M788 138h12M764 160v16" class="d mid"/>
+      <g><circle cx="828" cy="80" r="16" class="solid"/><path d="M820 80l6 6 11-12" class="d" style="stroke:#0A0A0A"/></g>
+      <text x="780" y="206" class="lb" text-anchor="middle" font-size="12" data-tt="k4.a">Zaadresowane</text><text x="780" y="226" class="lb" text-anchor="middle" font-size="12" data-tt="k4.b">potrzeby klientów</text><text x="780" y="246" class="lb" text-anchor="middle" font-size="12" data-tt="k4.c">korporacyjnych</text>
+    </g>
+  </svg>
+  <p class="podpis" data-t="e9.p">Mniej pustych kilometrów, mniej CO₂. Duzi klienci właśnie tego wymagają.</p>
+</section>
+
 <!-- 3. Mail wpada -->
-<section class="ekran" aria-labelledby="e3">
-  <p class="krok" data-t="e3.k">Krok 1</p>
+<section class="ekran" id="jak" aria-labelledby="e3">
+  <p class="krok" data-t="e3.k">Jak to działa · krok 1</p>
   <h2 id="e3" data-t="e3.h">Mail wpada</h2>
   <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
     <g class="env"><rect x="70" y="150" width="210" height="136" rx="6" class="d acc"/><path d="M70 150l105 84 105-84" class="d acc"/></g>
@@ -327,47 +368,6 @@ i{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none
   <p class="podpis" data-t="e7.p">Asystent dokłada ładunek po drodze. Ten sam bus, drugi przychód.</p>
 </section>
 
-<!-- 8. Łańcuch: optymalizacja = efektywność = ekologia = klienci korporacyjni -->
-<section class="ekran" aria-labelledby="e9">
-  <p class="krok" data-t="e9.k">I jeszcze jedno</p>
-  <h2 id="e9" data-t="e9.h">Pełny bus to <i>więcej niż marża</i></h2>
-  <svg class="pic" viewBox="0 0 900 330" aria-hidden="true">
-    <!-- 1. optymalizacja przejazdów: pełny bus -->
-    <g class="tak" style="--d:.1s">
-      <g transform="translate(40 88)">
-        <path d="M0 64V12h112l34 22v30H0z" class="d"/><path d="M112 12v52" class="d mid"/>
-        <rect x="8" y="20" width="22" height="34" class="solid"/><rect x="36" y="20" width="22" height="34" class="solid"/><rect x="64" y="20" width="22" height="34" class="solid"/><rect x="92" y="20" width="14" height="34" class="solid"/>
-        <circle cx="30" cy="72" r="10" class="d"/><circle cx="120" cy="72" r="10" class="d"/>
-      </g>
-      <text x="120" y="222" class="lb" text-anchor="middle" font-size="12" data-tt="k1.a">Optymalizacja</text><text x="120" y="242" class="lb" text-anchor="middle" font-size="12" data-tt="k1.b">przejazdów</text>
-    </g>
-    <text x="230" y="150" class="lb lba" text-anchor="middle" font-size="44">=</text>
-    <!-- 2. większa efektywność: wskaźnik -->
-    <g class="tak" style="--d:.45s">
-      <path d="M270 168a70 70 0 0 1 140 0" class="d mid"/>
-      <path d="M270 168a70 70 0 0 1 108-59" class="d acc"/>
-      <path d="M340 168l44-46" class="d acc"/><circle cx="340" cy="168" r="6" class="solid"/>
-      <text x="340" y="222" class="lb" text-anchor="middle" font-size="12" data-tt="k2.a">Większa</text><text x="340" y="242" class="lb" text-anchor="middle" font-size="12" data-tt="k2.b">efektywność</text>
-    </g>
-    <text x="450" y="150" class="lb lba" text-anchor="middle" font-size="44">=</text>
-    <!-- 3. większa ekologia: liść + CO2 w dół -->
-    <g class="tak" style="--d:.8s">
-      <path d="M520 172c-4-52 30-86 84-88-2 54-34 86-84 88z" class="d acc"/><path d="M524 170c14-30 34-52 62-70" class="d acc"/>
-      <text x="620" y="116" class="lb lbm" font-size="13">CO₂</text><path d="M632 124v30M622 146l10 10 10-10" class="d mid"/>
-      <text x="560" y="222" class="lb" text-anchor="middle" font-size="12" data-tt="k3.a">Większa</text><text x="560" y="242" class="lb" text-anchor="middle" font-size="12" data-tt="k3.b">ekologia</text>
-    </g>
-    <text x="670" y="150" class="lb lba" text-anchor="middle" font-size="44">=</text>
-    <!-- 4. klienci korporacyjni: biurowiec + odhaczony raport -->
-    <g class="tak" style="--d:1.15s">
-      <rect x="722" y="76" width="96" height="100" rx="3" class="d"/>
-      <path d="M740 94h12M764 94h12M788 94h12M740 116h12M764 116h12M788 116h12M740 138h12M764 138h12M788 138h12M764 160v16" class="d mid"/>
-      <g><circle cx="828" cy="80" r="16" class="solid"/><path d="M820 80l6 6 11-12" class="d" style="stroke:#0A0A0A"/></g>
-      <text x="780" y="206" class="lb" text-anchor="middle" font-size="12" data-tt="k4.a">Zaadresowane</text><text x="780" y="226" class="lb" text-anchor="middle" font-size="12" data-tt="k4.b">potrzeby klientów</text><text x="780" y="246" class="lb" text-anchor="middle" font-size="12" data-tt="k4.c">korporacyjnych</text>
-    </g>
-  </svg>
-  <p class="podpis" data-t="e9.p">Mniej pustych kilometrów, mniej CO₂. Duzi klienci właśnie tego wymagają.</p>
-</section>
-
 <!-- 8. Co z tego masz -->
 <section class="ekran" aria-labelledby="e8">
   <p class="krok" data-t="e8.k">Ten asystent to Open Logistic</p>
@@ -403,11 +403,11 @@ i{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none
   var EN={
     'skip':'Skip to content','nav.cta':'How it works',
     'hero.eyebrow':'Open Logistic · the dispatcher’s assistant','hero.h1':'Earn more <i>with the same van.</i>','hero.cta':'See how it works','hero.scroll':'Scroll','hero.tag':'Same van.<br>More money.',
-    'e1.k':'How it works','e1.h':'The assistant prepares. <i>You sign.</i>','e1.p':'Like a good office assistant: brings it ready, you say “yes”.',
+    'e1.k':'With the assistant','e1.h':'The assistant prepares. <i>You sign.</i>','e1.p':'Like a good office assistant: brings it ready, you say “yes”.',
     'a.asst':'Assistant','a.you':'You','a.tak':'YES',
     'e2.k':'Today','e2.h':'Without an assistant','e2.p':'Phone, calculator, emails — a quarter hour per request. And the van runs half empty.',
     'b.phone':'Phone','b.calc':'Calculator','b.mails':'40 emails','b.15':'15 min each','b.empty':'empty',
-    'e3.k':'Step 1','e3.h':'An email lands','e3.p':'The assistant reads it and pulls out what matters. You retype nothing.',
+    'e3.k':'How it works · step 1','e3.h':'An email lands','e3.p':'The assistant reads it and pulls out what matters. You retype nothing.',
     'c.route':'Route','c.route.v':'Poznań → Dresden','c.load':'Load','c.load.v':'6 pallets · 1.8 t','c.when':'Deadline','c.when.v':'Thursday by 12:00',
     'e4.k':'Step 2','e4.h':'The assistant prices it','e4.p':'Route, vehicle, price with margin. Margin under 10 %? The quote does not go out.',
     'd.city2':'Dresden','d.margin':'Margin','d.min':'min 10 %',
@@ -417,7 +417,7 @@ i{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none
     'f.market':'Exchange · 3 offers for Wrocław → Berlin','f.out':'out',
     'e7.k':'Step 5','e7.h':'Free space <i>is money</i>','e7.p':'The assistant adds a load along the way. Same van, second revenue.',
     'g.client':'Your client · 7 pallets','g.extra':'Extra load · 6','g.free':'Free · 5',
-    'e9.k':'One more thing','e9.h':'A full van is <i>more than margin</i>','e9.p':'Fewer empty kilometres, less CO₂. Big clients require exactly that.',
+    'e9.k':'Not only margin','e9.h':'A full van is <i>more than margin</i>','e9.p':'Fewer empty kilometres, less CO₂. Big clients require exactly that.',
     'k1.a':'Route','k1.b':'optimisation','k2.a':'Higher','k2.b':'efficiency','k3.a':'Greener','k3.b':'transport','k4.a':'Corporate','k4.b':'clients’ needs','k4.c':'addressed',
     'e8.k':'This assistant is Open Logistic','e8.h':'By noon: <i>+1 321 zł</i> margin','e8.p':'Three clicks. The assistant did the rest. Nothing went out without you.',
     'h.tak':'YES','h.1':'quote','h.2':'carrier','h.3':'extra load',
