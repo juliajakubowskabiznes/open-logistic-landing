@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Open Logistic — zarabiaj więcej na tym samym busie. Asystent przygotowuje wycenę, przewoźnika i doładunek. Ty klikasz „tak”.">
+<meta name="theme-color" content="#0A0A0A">
+<title>Open Logistic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#0A0A0A; --fg:#F1F0EC; --fg-2:#C9C8C2; --muted:#8C8B86; --line:rgba(255,255,255,.14); --line-2:rgba(255,255,255,.08);
+  --accent:#FF7A2F;
+  --sans:"Geist","Helvetica Neue",Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --gutter:clamp(20px,4vw,56px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{color-scheme:dark;scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 1rem/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+p,h1,h2,figure{margin:0}
+img{max-width:100%;display:block}
+h1,h2{font-weight:300;text-transform:uppercase;letter-spacing:.02em;line-height:1.05;text-wrap:balance}
+i{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:0}
+.wrap{max-width:1440px;margin-inline:auto;padding-inline:var(--gutter)}
+.eyebrow{font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:#000;padding:8px 12px;z-index:100}
+.skip:focus{left:8px}
+
+/* Pill */
+.pill{display:inline-flex;align-items:center;gap:12px;padding:15px 24px;border:1px solid rgba(255,255,255,.4);border-radius:999px;color:var(--fg);text-decoration:none;font-size:.8125rem;letter-spacing:.16em;text-transform:uppercase;line-height:1;background:transparent;cursor:pointer;transition:background .25s ease,color .25s ease,border-color .25s ease}
+.pill:hover{background:var(--fg);color:#0A0A0A;border-color:var(--fg)}
+.pill .ar{transition:transform .25s ease}
+.pill:hover .ar{transform:translateY(2px)}
+.pill.sm{padding:11px 18px;font-size:.75rem}
+
+/* Nawigacja */
+.nav{position:fixed;inset:env(safe-area-inset-top,0px) 0 auto 0;z-index:60;transition:background .3s ease}
+.nav.scrolled{background:rgba(10,10,10,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line-2)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:88px}
+.brand{display:inline-flex;align-items:baseline;gap:8px;text-decoration:none;font-size:1.5rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.brand i{font-size:1.75rem;color:var(--fg-2)}
+.nav-r{display:flex;align-items:center;gap:12px}
+.lang{display:inline-flex;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:3px;gap:2px}
+.lang button{appearance:none;border:0;background:transparent;color:var(--muted);font:500 .75rem/1 var(--sans);letter-spacing:.14em;padding:8px 12px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--fg);color:#0A0A0A}
+@media (max-width:640px){.nav .wrap{height:72px}.brand{font-size:1.25rem}.brand i{font-size:1.5rem}.nav .pill{display:none}}
+
+/* Hero — galeria 3D */
+.hero{height:280vh;position:relative}
+.stage{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1100px;perspective-origin:50% 50%;transform-style:preserve-3d}
+.fly{position:absolute;left:var(--x);top:var(--y);width:var(--w);aspect-ratio:var(--ar,4/3);transform:translate3d(-50%,-50%,var(--z));will-change:transform,opacity;overflow:hidden;background:#111}
+.fly img{width:100%;height:100%;object-fit:cover;filter:saturate(.85) contrast(1.05)}
+.stage::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(10,10,10,.55) 100%);pointer-events:none}
+.hero-copy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-inline:var(--gutter);opacity:0;transform:translateY(24px);pointer-events:none;z-index:2}
+.hero-copy.on{pointer-events:auto}
+.hero-copy .eyebrow{color:var(--fg-2)}
+.hero-copy h1{margin-top:22px;font-size:clamp(2.125rem,5.2vw,4.75rem);max-width:22ch;line-height:1.02}
+.hero-copy h1 i{color:var(--accent)}
+.hero-copy .pill{margin-top:36px}
+.scrollhint{position:absolute;left:var(--gutter);bottom:28px;font-size:.6875rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;z-index:2}
+.scrollhint::after{content:"";width:1px;height:36px;background:var(--muted);animation:drop 1.8s ease-in-out infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.hero-tag{position:absolute;right:var(--gutter);bottom:28px;font-size:.6875rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);z-index:2;text-align:right}
+@media (max-width:760px){.fly.desk{display:none}.hero{height:220vh}.hero-tag{display:none}}
+.static .hero{height:auto}
+.static .stage{position:relative;height:auto;perspective:none;padding:120px var(--gutter) 40px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.static .fly{position:static;transform:none;width:auto;opacity:1!important}
+.static .hero-copy{position:static;opacity:1!important;transform:none!important;grid-column:1/-1;padding-block:48px}
+.static .scrollhint,.static .stage::after{display:none}
+
+/* Ekrany ELI5 */
+.eli{border-top:1px solid var(--line)}
+.ekran{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(104px,15vh,150px) var(--gutter) clamp(56px,8vh,100px);scroll-margin-top:0}
+.ekran .krok{font-size:.75rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent)}
+.ekran h2{margin-top:14px;font-size:clamp(1.75rem,4vw,3.25rem);max-width:24ch}
+.ekran h2 i{color:var(--accent)}
+.ekran .podpis{margin-top:20px;font-size:clamp(1.0625rem,2vw,1.4rem);color:var(--fg-2);max-width:42ch;line-height:1.45;text-wrap:balance}
+.pic{width:min(900px,92vw);height:auto;max-height:min(50vh,480px);display:block;margin-top:clamp(24px,4vh,48px);overflow:visible}
+.pic .d{fill:none;stroke:#EDECE6;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.pic .dim{stroke:#4A4A48}
+.pic .mid{stroke:#8C8B86}
+.pic .acc{stroke:var(--accent)}
+.pic .solid{fill:var(--accent);stroke:none}
+.pic .soft{fill:var(--accent);fill-opacity:.18;stroke:var(--accent);stroke-width:3}
+.pic .lb{font:300 17px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;fill:#EDECE6}
+.pic .lba{fill:var(--accent)}
+.pic .lbm{fill:#8C8B86}
+.pic .lbk{fill:#0A0A0A;font-weight:500}
+.pic .num{font:italic 400 44px/1 var(--serif);fill:var(--accent);letter-spacing:0;text-transform:none}
+.pic .env,.pic .stamp,.pic .mark,.pic .f1,.pic .f2,.pic .f3,.pic .finger,.pic .btnc,.pic .sent,.pic .pal,.pic .tak{transform-box:fill-box;transform-origin:center}
+.pic .grow{transform-box:fill-box;transform-origin:left center}
+/* animacje — startują, gdy ekran wjedzie */
+.in .env{animation:slidein 1s cubic-bezier(.2,.7,.2,1) both}
+.in .stamp{animation:press 1.3s cubic-bezier(.3,1.3,.4,1) .3s both}
+.in .mark{animation:pop .5s ease-out 1.15s both}
+.in .grow{animation:grow 1.2s ease-out .4s both}
+.in .f1{animation:rise .6s ease-out .3s both}
+.in .f2{animation:rise .6s ease-out .75s both}
+.in .f3{animation:rise .6s ease-out 1.2s both}
+.in .van{offset-path:path('M120 210C230 90 440 90 550 210');offset-rotate:0deg;animation:ride 4s ease-in-out infinite alternate}
+.in .finger{animation:tap 1.8s ease-in-out .3s both}
+.in .btnc{animation:pressed 1.8s ease-in-out .3s both}
+.in .sent{animation:pop .5s cubic-bezier(.2,1.4,.4,1) 1.3s both}
+.in .pal{animation:pop .45s ease-out both;animation-delay:var(--d,0s)}
+.in .tak{animation:pop .5s cubic-bezier(.2,1.4,.4,1) both;animation-delay:var(--d,0s)}
+@keyframes slidein{from{transform:translateX(-60px);opacity:0}}
+@keyframes press{0%{transform:translateY(-52px)}60%{transform:translateY(5px)}100%{transform:translateY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(1.7)}to{opacity:1;transform:scale(1)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+@keyframes ride{from{offset-distance:0%}to{offset-distance:100%}}
+@keyframes tap{0%{transform:translateY(-26px)}40%{transform:translateY(10px)}62%{transform:translateY(10px)}100%{transform:translateY(-8px)}}
+@keyframes pressed{0%{transform:scale(1)}40%{transform:scale(.93)}62%{transform:scale(.93)}100%{transform:scale(1)}}
+
+/* Stopka */
+.foot{padding-block:40px;border-top:1px solid var(--line);font-size:.8125rem;color:var(--muted)}
+.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 32px}
+.foot .links{display:flex;flex-wrap:wrap;gap:8px 24px}
+.foot a{text-decoration:none;color:var(--fg-2)}
+.foot a:hover{color:var(--accent)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .scrollhint::after{animation:none}
+  .in .env,.in .stamp,.in .mark,.in .grow,.in .f1,.in .f2,.in .f3,.in .van,.in .finger,.in .btnc,.in .sent,.in .pal,.in .tak{animation:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-t="skip">Przejdź do treści</a>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Open Logistic">Open <i>Logistic</i></a>
+    <div class="nav-r">
+      <div class="lang" role="group" aria-label="Język / Language">
+        <button type="button" data-lang="pl" aria-pressed="true">PL</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="pill sm" href="#jak"><span data-t="nav.cta">Jak to działa</span> <span class="ar" aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="hero" id="top" aria-label="Open Logistic">
+  <div class="stage" id="stage">
+    <figure class="fly" style="--x:50%;--y:34%;--w:min(34vw,520px);--z:-200px;--ar:16/10"><img src="https://images.unsplash.com/photo-1655478157959-3fcfc543c1a2?auto=format&fit=crop&w=1200&q=75" alt="Ciężarówka na autostradzie o zachodzie słońca"></figure>
+    <figure class="fly desk" style="--x:18%;--y:60%;--w:min(22vw,340px);--z:-470px;--ar:4/5"><img src="https://images.unsplash.com/photo-1774279922089-1b4333ca3a22?auto=format&fit=crop&w=900&q=75" alt="Ciężarówki na placu nocą"></figure>
+    <figure class="fly" style="--x:82%;--y:40%;--w:min(24vw,360px);--z:-740px;--ar:4/5"><img src="https://images.unsplash.com/photo-1788370538342-b28c755cf61b?auto=format&fit=crop&w=900&q=75" alt="Autostrada nocą"></figure>
+    <figure class="fly desk" style="--x:30%;--y:22%;--w:min(20vw,300px);--z:-1010px;--ar:1/1"><img src="https://images.unsplash.com/photo-1611938845621-f7d331a14255?auto=format&fit=crop&w=900&q=75" alt="Węzeł autostradowy z lotu ptaka"></figure>
+    <figure class="fly" style="--x:66%;--y:74%;--w:min(26vw,400px);--z:-1280px;--ar:4/3"><img src="https://images.unsplash.com/photo-1504376830547-506dedfe1fe9?auto=format&fit=crop&w=1000&q=75" alt="Rampy załadunkowe magazynu"></figure>
+    <figure class="fly desk" style="--x:12%;--y:30%;--w:min(18vw,280px);--z:-1550px;--ar:4/5"><img src="https://images.unsplash.com/photo-1601002052861-8cd1485edf1f?auto=format&fit=crop&w=800&q=75" alt="Stos palet"></figure>
+    <figure class="fly" style="--x:50%;--y:66%;--w:min(30vw,460px);--z:-1820px;--ar:3/2"><img src="https://images.unsplash.com/photo-1619302820124-e3b9d8a7f686?auto=format&fit=crop&w=1100&q=75" alt="Białe ciężarówki w rzędzie"></figure>
+    <figure class="fly desk" style="--x:86%;--y:22%;--w:min(20vw,300px);--z:-2090px;--ar:4/5"><img src="https://images.unsplash.com/photo-1532635026-d12867005472?auto=format&fit=crop&w=800&q=75" alt="Wózek widłowy ładuje naczepę"></figure>
+    <figure class="fly" style="--x:24%;--y:78%;--w:min(24vw,360px);--z:-2360px;--ar:16/10"><img src="https://images.unsplash.com/photo-1618582948377-cd7eb0e8cb14?auto=format&fit=crop&w=1000&q=75" alt="Ciężarówka na drodze wśród pól"></figure>
+    <figure class="fly desk" style="--x:70%;--y:18%;--w:min(22vw,340px);--z:-2630px;--ar:16/10"><img src="https://images.unsplash.com/photo-1787092843961-b82a63bf7354?auto=format&fit=crop&w=1000&q=75" alt="Kabina ciężarówki"></figure>
+    <div class="hero-copy" id="hero-copy">
+      <p class="eyebrow" data-t="hero.eyebrow">Open Logistic · asystent spedytora</p>
+      <h1 data-t="hero.h1">Zarabiaj więcej <i>na tym samym busie.</i></h1>
+      <a class="pill" href="#jak"><span data-t="hero.cta">Zobacz, jak to działa</span> <span class="ar" aria-hidden="true">↓</span></a>
+    </div>
+    <p class="scrollhint" data-t="hero.scroll">Przewiń</p>
+    <p class="hero-tag" data-t="hero.tag">Ten sam bus.<br>Więcej pieniędzy.</p>
+  </div>
+</section>
+
+<!-- JAK TO DZIAŁA — 8 ekranów -->
+<div class="eli" id="jak">
+
+<!-- 1. Analogia -->
+<section class="ekran" aria-labelledby="e1">
+  <p class="krok" data-t="e1.k">Jak to działa</p>
+  <h2 id="e1" data-t="e1.h">Asystent przygotowuje. <i>Ty podpisujesz.</i></h2>
+  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
+    <line x1="60" y1="345" x2="840" y2="345" class="d dim"/>
+    <circle cx="235" cy="118" r="26" class="d"/>
+    <path d="M235 144V252M235 172l86 42M235 172l-52 56M235 252l-28 90M235 252l28 90" class="d"/>
+    <text x="235" y="395" class="lb" text-anchor="middle" data-tt="a.asst">Asystent</text>
+    <g transform="rotate(-6 400 265)">
+      <rect x="335" y="190" width="130" height="160" rx="5" class="d"/>
+      <path d="M358 222h84M358 248h64M358 274h84" class="d mid"/>
+      <text x="400" y="326" class="lb lba" text-anchor="middle" font-size="22">2 340 zł</text>
+      <g class="mark"><circle cx="438" cy="214" r="22" class="d acc"/><text x="438" y="220" class="lb lba" text-anchor="middle" font-size="14" data-tt="a.tak">TAK</text></g>
+    </g>
+    <circle cx="650" cy="118" r="26" class="d"/>
+    <path d="M650 144V252M650 172l-70 44M650 172l58 60M650 252l-28 90M650 252l28 90" class="d"/>
+    <g class="stamp"><rect x="500" y="196" width="60" height="30" rx="4" class="solid"/><path d="M530 196V170" class="d acc"/><circle cx="530" cy="164" r="7" class="solid"/></g>
+    <text x="650" y="395" class="lb" text-anchor="middle" data-tt="a.you">Ty</text>
+  </svg>
+  <p class="podpis" data-t="e1.p">Jak dobry asystent w biurze: przynosi gotowe, Ty mówisz „tak”.</p>
+</section>
+
+<!-- 2. Bez asystenta -->
+<section class="ekran" aria-labelledby="e2">
+  <p class="krok" data-t="e2.k">Dziś</p>
+  <h2 id="e2" data-t="e2.h">Bez asystenta</h2>
+  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
+    <circle cx="450" cy="120" r="26" class="d"/>
+    <path d="M450 146V250M450 172l-72 40M450 172l72 40M450 250l-30 92M450 250l30 92" class="d"/>
+    <g class="d mid"><rect x="110" y="90" width="64" height="116" rx="12"/><circle cx="142" cy="184" r="5"/></g>
+    <text x="142" y="240" class="lb lbm" text-anchor="middle" font-size="13" data-tt="b.phone">Telefon</text>
+    <g class="d mid"><rect x="200" y="250" width="92" height="116" rx="6"/><rect x="216" y="266" width="60" height="24" rx="3"/><circle cx="224" cy="316" r="4"/><circle cx="246" cy="316" r="4"/><circle cx="268" cy="316" r="4"/><circle cx="224" cy="342" r="4"/><circle cx="246" cy="342" r="4"/><circle cx="268" cy="342" r="4"/></g>
+    <text x="246" y="398" class="lb lbm" text-anchor="middle" font-size="13" data-tt="b.calc">Kalkulator</text>
+    <g class="d mid"><rect x="590" y="96" width="120" height="78" rx="4"/><path d="M590 96l60 46 60-46"/><rect x="612" y="194" width="120" height="78" rx="4"/><path d="M612 194l60 46 60-46"/></g>
+    <text x="662" y="304" class="lb lbm" text-anchor="middle" font-size="13" data-tt="b.mails">40 maili</text>
+    <circle cx="800" cy="110" r="42" class="d mid"/><path d="M800 110V80M800 110l22 14" class="d acc"/>
+    <text x="800" y="180" class="lb lba" text-anchor="middle" font-size="14" data-tt="b.15">15 min każdy</text>
+    <g transform="translate(650 322)">
+      <path d="M0 62V10h150l40 26v26H0z" class="d"/>
+      <path d="M150 10v52" class="d mid"/>
+      <rect x="8" y="18" width="62" height="36" class="solid"/>
+      <rect x="78" y="18" width="64" height="36" class="d mid" stroke-dasharray="5 6"/>
+      <circle cx="36" cy="70" r="11" class="d"/><circle cx="160" cy="70" r="11" class="d"/>
+      <text x="110" y="42" class="lb lbm" text-anchor="middle" font-size="12" data-tt="b.empty">pusto</text>
+    </g>
+  </svg>
+  <p class="podpis" data-t="e2.p">Telefon, kalkulator, maile — kwadrans na jedno zapytanie. A bus jedzie w połowie pusty.</p>
+</section>
+
+<!-- 3. Mail wpada -->
+<section class="ekran" aria-labelledby="e3">
+  <p class="krok" data-t="e3.k">Krok 1</p>
+  <h2 id="e3" data-t="e3.h">Mail wpada</h2>
+  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
+    <g class="env"><rect x="70" y="150" width="210" height="136" rx="6" class="d acc"/><path d="M70 150l105 84 105-84" class="d acc"/></g>
+    <path d="M312 218h78M378 204l16 14-16 14" class="d mid"/>
+    <rect x="430" y="80" width="400" height="270" rx="6" class="d"/>
+    <g class="f1"><text x="462" y="128" class="lb lbm" font-size="12" data-tt="c.route">Trasa</text><text x="462" y="158" class="lb" font-size="20" data-tt="c.route.v">Poznań → Drezno</text></g>
+    <g class="f2"><text x="462" y="206" class="lb lbm" font-size="12" data-tt="c.load">Ładunek</text><text x="462" y="236" class="lb" font-size="20" data-tt="c.load.v">6 palet · 1,8 t</text></g>
+    <g class="f3"><text x="462" y="284" class="lb lbm" font-size="12" data-tt="c.when">Termin</text><text x="462" y="314" class="lb" font-size="20" data-tt="c.when.v">Czwartek do 12:00</text></g>
+    <circle cx="380" cy="372" r="18" class="d"/><path d="M380 390v22M368 382l-24 10M392 382l24 10" class="d"/>
+  </svg>
+  <p class="podpis" data-t="e3.p">Asystent czyta i wyciąga, co ważne. Ty nic nie przepisujesz.</p>
+</section>
+
+<!-- 4. Liczy cenę -->
+<section class="ekran" aria-labelledby="e4">
+  <p class="krok" data-t="e4.k">Krok 2</p>
+  <h2 id="e4" data-t="e4.h">Asystent liczy cenę</h2>
+  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
+    <path d="M120 210C230 90 440 90 550 210" class="d mid" stroke-dasharray="4 10"/>
+    <circle cx="120" cy="210" r="8" class="solid"/><circle cx="550" cy="210" r="8" class="solid"/>
+    <text x="120" y="252" class="lb" text-anchor="middle" font-size="15">Poznań</text>
+    <text x="550" y="252" class="lb" text-anchor="middle" font-size="15" data-tt="d.city2">Drezno</text>
+    <text x="335" y="90" class="lb lbm" text-anchor="middle" font-size="13">512 km</text>
+    <g class="van"><rect x="-20" y="-13" width="40" height="26" rx="5" class="solid"/></g>
+    <path d="M640 118h170l40 42-40 42H640z" class="d acc"/><circle cx="664" cy="160" r="6" class="d acc"/>
+    <text x="735" y="168" class="lb lba" text-anchor="middle" font-size="22">2 340 zł</text>
+    <text x="120" y="318" class="lb lbm" font-size="12" data-tt="d.margin">Marża</text>
+    <rect x="120" y="332" width="620" height="14" rx="7" class="d dim"/>
+    <rect x="120" y="332" width="372" height="14" rx="7" class="solid grow"/>
+    <path d="M327 320v38" class="d"/><text x="327" y="384" class="lb" text-anchor="middle" font-size="12" data-tt="d.min">min 10 %</text>
+    <text x="760" y="346" class="lb lba" font-size="18">18 %</text>
+  </svg>
+  <p class="podpis" data-t="e4.p">Trasa, auto, cena z marżą. Marża poniżej 10 %? Oferta nie wychodzi.</p>
+</section>
+
+<!-- 5. Ty klikasz -->
+<section class="ekran" aria-labelledby="e5">
+  <p class="krok" data-t="e5.k">Krok 3</p>
+  <h2 id="e5" data-t="e5.h">Ty klikasz <i>„wyślij”</i></h2>
+  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
+    <rect x="110" y="60" width="310" height="300" rx="6" class="d"/>
+    <path d="M142 110h246M142 140h206M142 170h246M142 200h170" class="d mid"/>
+    <text x="142" y="262" class="lb lba" font-size="24">2 340 zł</text>
+    <text x="142" y="292" class="lb lbm" font-size="12" data-tt="e.margin">marża 18 %</text>
+    <g class="sent"><g transform="rotate(-10 300 330)"><rect x="200" y="302" width="200" height="56" rx="6" class="d acc"/><text x="300" y="338" class="lb lba" text-anchor="middle" font-size="18" data-tt="e.sent">Wysłane</text></g></g>
+    <g class="btnc"><circle cx="650" cy="230" r="72" class="solid"/><text x="650" y="237" class="lb lbk" text-anchor="middle" font-size="18" data-tt="e.send">Wyślij</text></g>
+    <g class="finger"><rect x="676" y="20" width="40" height="130" rx="20" class="d"/><path d="M716 120h30v40" class="d"/></g>
+    <text x="650" y="352" class="lb lbm" text-anchor="middle" font-size="13" data-tt="e.3min">3 minuty od maila</text>
+  </svg>
+  <p class="podpis" data-t="e5.p">Jedno kliknięcie. Klient ma cenę w trzy minuty, nie po południu.</p>
+</section>
+
+<!-- 6. Szuka auta -->
+<section class="ekran" aria-labelledby="e6">
+  <p class="krok" data-t="e6.k">Krok 4</p>
+  <h2 id="e6" data-t="e6.h">Asystent szuka auta</h2>
+  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
+    <text x="450" y="52" class="lb lbm" text-anchor="middle" font-size="13" data-tt="f.market">Giełda · 3 oferty na Wrocław → Berlin</text>
+    <g transform="translate(70 130)">
+      <rect x="0" y="0" width="150" height="72" rx="4" class="d acc"/><path d="M150 22h44l20 26v24h-64" class="d acc"/><circle cx="36" cy="84" r="12" class="d acc"/><circle cx="184" cy="84" r="12" class="d acc"/>
+      <text x="107" y="150" class="lb" text-anchor="middle" font-size="20">1 240 zł</text><text x="107" y="176" class="lb lbm" text-anchor="middle" font-size="13">★ 4,6</text>
+      <g class="mark"><circle cx="107" cy="222" r="18" class="d acc"/><path d="M98 222l7 7 12-14" class="d acc"/></g>
+    </g>
+    <g transform="translate(345 130)">
+      <rect x="0" y="0" width="150" height="72" rx="4" class="d mid"/><path d="M150 22h44l20 26v24h-64" class="d mid"/><circle cx="36" cy="84" r="12" class="d mid"/><circle cx="184" cy="84" r="12" class="d mid"/>
+      <path d="M20-12l176 112M196-12L20 100" class="d mid"/>
+      <text x="107" y="150" class="lb lbm" text-anchor="middle" font-size="20">1 190 zł</text><text x="107" y="176" class="lb lbm" text-anchor="middle" font-size="13">★ 1,8</text>
+      <text x="107" y="228" class="lb lbm" text-anchor="middle" font-size="12" data-tt="f.out">odpada</text>
+    </g>
+    <g transform="translate(620 130)">
+      <rect x="0" y="0" width="150" height="72" rx="4" class="d"/><path d="M150 22h44l20 26v24h-64" class="d"/><circle cx="36" cy="84" r="12" class="d"/><circle cx="184" cy="84" r="12" class="d"/>
+      <text x="107" y="150" class="lb" text-anchor="middle" font-size="20">1 410 zł</text><text x="107" y="176" class="lb lbm" text-anchor="middle" font-size="13">★ 4,9</text>
+    </g>
+  </svg>
+  <p class="podpis" data-t="e6.p">Nie ma własnego busa? Najlepsza marża wygrywa. Słaby przewoźnik odpada.</p>
+</section>
+
+<!-- 7. Wolne miejsce -->
+<section class="ekran" aria-labelledby="e7">
+  <p class="krok" data-t="e7.k">Krok 5</p>
+  <h2 id="e7" data-t="e7.h">Wolne miejsce <i>to pieniądze</i></h2>
+  <svg class="pic" viewBox="0 0 900 420" aria-hidden="true">
+    <text x="840" y="92" class="num" text-anchor="end">+680 zł</text>
+    <rect x="60" y="110" width="660" height="180" rx="6" class="d"/>
+    <path d="M720 150h80l40 44v96H720" class="d"/>
+    <circle cx="160" cy="304" r="14" class="d"/><circle cx="620" cy="304" r="14" class="d"/><circle cx="800" cy="304" r="14" class="d"/>
+    <g>
+      <rect x="84" y="132" width="62" height="66" class="solid"/><rect x="156" y="132" width="62" height="66" class="solid"/><rect x="228" y="132" width="62" height="66" class="solid"/><rect x="300" y="132" width="62" height="66" class="solid"/><rect x="372" y="132" width="62" height="66" class="solid"/><rect x="444" y="132" width="62" height="66" class="solid"/><rect x="516" y="132" width="62" height="66" class="solid"/>
+      <rect x="588" y="132" width="62" height="66" class="soft pal" style="--d:.3s"/><rect x="660" y="132" width="52" height="66" class="soft pal" style="--d:.45s"/>
+      <rect x="84" y="214" width="62" height="66" class="soft pal" style="--d:.6s"/><rect x="156" y="214" width="62" height="66" class="soft pal" style="--d:.75s"/><rect x="228" y="214" width="62" height="66" class="soft pal" style="--d:.9s"/><rect x="300" y="214" width="62" height="66" class="soft pal" style="--d:1.05s"/>
+      <rect x="372" y="214" width="62" height="66" class="d dim"/><rect x="444" y="214" width="62" height="66" class="d dim"/><rect x="516" y="214" width="62" height="66" class="d dim"/><rect x="588" y="214" width="62" height="66" class="d dim"/><rect x="660" y="214" width="52" height="66" class="d dim"/>
+    </g>
+    <rect x="60" y="360" width="14" height="14" class="solid"/><text x="84" y="372" class="lb" font-size="12" data-tt="g.client">Twój klient · 7 palet</text>
+    <rect x="330" y="360" width="14" height="14" class="soft"/><text x="354" y="372" class="lb" font-size="12" data-tt="g.extra">Doładunek · 6</text>
+    <rect x="560" y="360" width="14" height="14" class="d dim"/><text x="584" y="372" class="lb lbm" font-size="12" data-tt="g.free">Wolne · 5</text>
+  </svg>
+  <p class="podpis" data-t="e7.p">Asystent dokłada ładunek po drodze. Ten sam bus, drugi przychód.</p>
+</section>
+
+<!-- 8. Co z tego masz -->
+<section class="ekran" aria-labelledby="e8">
+  <p class="krok" data-t="e8.k">Ten asystent to Open Logistic</p>
+  <h2 id="e8" data-t="e8.h">Do południa: <i>+1 321 zł</i> marży</h2>
+  <svg class="pic" viewBox="0 0 900 260" aria-hidden="true">
+    <g class="tak" style="--d:.1s"><g transform="rotate(-8 150 110)"><rect x="80" y="80" width="140" height="60" rx="6" class="d acc"/><text x="150" y="120" class="lb lba" text-anchor="middle" font-size="22" data-tt="h.tak">TAK</text></g><text x="150" y="192" class="lb lbm" text-anchor="middle" font-size="13">08:08</text><text x="150" y="220" class="lb" text-anchor="middle" font-size="12" data-tt="h.1">oferta</text></g>
+    <g class="tak" style="--d:.5s"><g transform="rotate(6 450 110)"><rect x="380" y="80" width="140" height="60" rx="6" class="d acc"/><text x="450" y="120" class="lb lba" text-anchor="middle" font-size="22" data-tt="h.tak">TAK</text></g><text x="450" y="192" class="lb lbm" text-anchor="middle" font-size="13">10:16</text><text x="450" y="220" class="lb" text-anchor="middle" font-size="12" data-tt="h.2">przewoźnik</text></g>
+    <g class="tak" style="--d:.9s"><g transform="rotate(-5 750 110)"><rect x="680" y="80" width="140" height="60" rx="6" class="d acc"/><text x="750" y="120" class="lb lba" text-anchor="middle" font-size="22" data-tt="h.tak">TAK</text></g><text x="750" y="192" class="lb lbm" text-anchor="middle" font-size="13">10:31</text><text x="750" y="220" class="lb" text-anchor="middle" font-size="12" data-tt="h.3">doładunek</text></g>
+  </svg>
+  <p class="podpis" data-t="e8.p">Trzy kliknięcia. Resztę zrobił asystent. Nic nie wyszło bez Ciebie.</p>
+</section>
+
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span data-t="foot.copy">© 2026 Zespół Open Logistic · HackOn Wrocław 2026</span>
+    <span class="links">
+      <a href="https://github.com/waclawek/open-logistic" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://unsplash.com" target="_blank" rel="noopener" data-t="foot.ph">Zdjęcia: Unsplash ↗</a>
+      <span data-t="foot.demo">Liczby są przykładowe.</span>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce)document.documentElement.classList.add('static');
+
+  /* ===== i18n ===== */
+  var EN={
+    'skip':'Skip to content','nav.cta':'How it works',
+    'hero.eyebrow':'Open Logistic · the dispatcher’s assistant','hero.h1':'Earn more <i>with the same van.</i>','hero.cta':'See how it works','hero.scroll':'Scroll','hero.tag':'Same van.<br>More money.',
+    'e1.k':'How it works','e1.h':'The assistant prepares. <i>You sign.</i>','e1.p':'Like a good office assistant: brings it ready, you say “yes”.',
+    'a.asst':'Assistant','a.you':'You','a.tak':'YES',
+    'e2.k':'Today','e2.h':'Without an assistant','e2.p':'Phone, calculator, emails — a quarter hour per request. And the van runs half empty.',
+    'b.phone':'Phone','b.calc':'Calculator','b.mails':'40 emails','b.15':'15 min each','b.empty':'empty',
+    'e3.k':'Step 1','e3.h':'An email lands','e3.p':'The assistant reads it and pulls out what matters. You retype nothing.',
+    'c.route':'Route','c.route.v':'Poznań → Dresden','c.load':'Load','c.load.v':'6 pallets · 1.8 t','c.when':'Deadline','c.when.v':'Thursday by 12:00',
+    'e4.k':'Step 2','e4.h':'The assistant prices it','e4.p':'Route, vehicle, price with margin. Margin under 10 %? The quote does not go out.',
+    'd.city2':'Dresden','d.margin':'Margin','d.min':'min 10 %',
+    'e5.k':'Step 3','e5.h':'You click <i>“send”</i>','e5.p':'One click. The client has a price in three minutes, not in the afternoon.',
+    'e.margin':'margin 18 %','e.sent':'Sent','e.send':'Send','e.3min':'3 minutes after the email',
+    'e6.k':'Step 4','e6.h':'The assistant finds a truck','e6.p':'No van of your own? Best margin wins. A weak carrier is out.',
+    'f.market':'Exchange · 3 offers for Wrocław → Berlin','f.out':'out',
+    'e7.k':'Step 5','e7.h':'Free space <i>is money</i>','e7.p':'The assistant adds a load along the way. Same van, second revenue.',
+    'g.client':'Your client · 7 pallets','g.extra':'Extra load · 6','g.free':'Free · 5',
+    'e8.k':'This assistant is Open Logistic','e8.h':'By noon: <i>+1 321 zł</i> margin','e8.p':'Three clicks. The assistant did the rest. Nothing went out without you.',
+    'h.tak':'YES','h.1':'quote','h.2':'carrier','h.3':'extra load',
+    'foot.copy':'© 2026 Open Logistic team · HackOn Wrocław 2026','foot.ph':'Photos: Unsplash ↗','foot.demo':'Numbers are illustrative.'
+  };
+  var PL={};
+  var tEls=document.querySelectorAll('[data-t]'),ttEls=document.querySelectorAll('[data-tt]');
+  tEls.forEach(function(el){PL[el.getAttribute('data-t')]=el.innerHTML;});
+  ttEls.forEach(function(el){var k=el.getAttribute('data-tt');if(PL[k]==null)PL[k]=el.textContent;});
+  var lang='pl';try{var sv=localStorage.getItem('ol-lang');if(sv==='en'||sv==='pl')lang=sv;}catch(e){}
+  function applyLang(l){
+    lang=l;document.documentElement.lang=l;var D=l==='en'?EN:PL;
+    tEls.forEach(function(el){var k=el.getAttribute('data-t');if(D[k]!=null)el.innerHTML=D[k];});
+    ttEls.forEach(function(el){var k=el.getAttribute('data-tt');if(D[k]!=null)el.textContent=D[k];});
+    document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-lang')===l));});
+    try{localStorage.setItem('ol-lang',l);}catch(e){}
+  }
+  document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){applyLang(b.getAttribute('data-lang'));});});
+  applyLang(lang);
+
+  /* ===== Hero 3D ===== */
+  var hero=document.querySelector('.hero'),stage=document.getElementById('stage'),copy=document.getElementById('hero-copy'),nav=document.getElementById('nav');
+  var flies=[].slice.call(stage.querySelectorAll('.fly')).map(function(el){return {el:el,z:parseFloat(getComputedStyle(el).getPropertyValue('--z'))||0};});
+  var ticking=false;
+  function heroFrame(){
+    ticking=false;
+    nav.classList.toggle('scrolled',window.scrollY>40);
+    var total=hero.offsetHeight-window.innerHeight;if(total<=0)return;
+    var p=Math.min(Math.max(-hero.getBoundingClientRect().top/total,0),1);
+    var travel=3200,fadeAll=1-Math.min(Math.max((p-.58)/.16,0),1);
+    flies.forEach(function(f){
+      var z=f.z+p*travel;
+      var op=z>250?Math.max(0,1-(z-250)/450):Math.min(1,(z+3300)/900);
+      f.el.style.transform='translate3d(-50%,-50%,'+z+'px)';
+      f.el.style.opacity=op*fadeAll;
+    });
+    var c=Math.min(Math.max((p-.62)/.18,0),1);
+    copy.style.opacity=c;copy.style.transform='translateY('+(24-24*c)+'px)';
+    copy.classList.toggle('on',c>.6);
+  }
+  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(heroFrame);}}
+  if(!reduce){window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);heroFrame();}
+  else{window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>40);},{passive:true});}
+
+  /* ===== Ekrany: start animacji, gdy wjadą ===== */
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.35});
+    document.querySelectorAll('.ekran').forEach(function(el){io.observe(el);});
+  }else{document.querySelectorAll('.ekran').forEach(function(el){el.classList.add('in');});}
+})();
+</script>
+</body>
+</html>
